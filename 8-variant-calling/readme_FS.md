@@ -2,11 +2,12 @@
 
 **Wprowadzenie**
 
-Wykrywanie wariantów genetycznych (variant calling) to proces polegający na identyfikacji zmian w sekwencji DNA przez porównanie sekwencji badanego organizmu z genomem referencyjnym. Zmiany te, określane jako warianty, mogą obejmować różne modyfikacje, takie jak zamiany pojedynczych nukleotydów (SNP), insercje, delecje, a także zmiany strukturalne (np. zmiany liczby kopii fragmentów DNA, odwrócenie orientacji fragmentów DNA). Warianty te odgrywają kluczową rolę w wielu obszarach, w tym:
-- Badaniach nad genetycznym podłożem chorób,
-- Identyfikacji mutacji wpływających na cechy fenotypowe,
-- Analizie genetycznej różnorodności populacji,
-- Badaniach ewolucyjnych.
+Wykrywanie wariantów to proces identyfikacji zmian w sekwencjach DNA, który polega na porównaniu sekwencji genomu badanego organizmu z genomem referencyjnym. Zmiany te, nazywane wariantami, mogą obejmować różne formy mutacji, takie jak: insercje, delecje, zamiany pojedynczych nukleotydów oraz zmiany strukturalne, na przykład zmiany liczby kopii fragmentów DNA, transpozycje czy odwrócenie orientacji fragmentów DNA w obrębie chromosomów. Proces ten odgrywa kluczową rolę w badaniach genomowych i stanowi podstawę do:
+
+- poszukiwania genetycznych przyczyn chorób,
+- identyfikowania mutacji odpowiedzialnych za cechy fenotypowe,
+- analizy różnorodności genetycznej w populacjach,
+- badań ewolucyjnych.
 
 ---
 # 1. Przygotowanie narzędzi i środowiska pracy
@@ -21,21 +22,23 @@ Do przeprowadzenia analizy wariantów wykorzystano pakiety z ekosystemu Biocondu
 - `BiocParallel` – do optymalizacji obliczeń poprzez równoległość.
 
 **Konfiguracja środowiska roboczego**
-- Aby ułatwić zarządzanie plikami, ustawiono katalog roboczy za pomocą funkcji setwd(). Dodatkowo, w celu sprawdzenia dostępnych plików w katalogu, użyto funkcji list.files().
+- Ustalamy katalog roboczy za pomocą funkcji setwd, co ułatwia zarządzanie plikami wejściowymi i wyjściowymi. Funkcja list.files() pozwala sprawdzić dostępność plików w bieżącym katalogu.
+
 ---
 # 2. Przygotowanie danych wejściowych
 **Wczytanie pliku BAM**
-- Sekwencje DNA zapisane w pliku BAM (aligned_sample1.BAM), zawierającym wyrównane odczyty względem genomu referencyjnego, zostały załadowane przy pomocy funkcji BamFile().
+- Plik BAM (aligned_sample1.BAM), zawierający wyrównane odczyty sekwencyjne, jest wczytywany przy pomocy funkcji BamFile().
 
 **Wczytanie genomu referencyjnego**
-- Referencyjny genom (ecoli_reference1.fasta) załadowano funkcją FaFile(), umożliwiając odwoływanie się do sekwencji referencyjnych podczas analizy.
+- Genom referencyjny w formacie FASTA (ecoli_reference1.fasta) ładowany jest za pomocą funkcji FaFile().
 ---
 # 3. Sortowanie i indeksowanie danych
 **Sortowanie pliku BAM**
-- Plik BAM został posortowany względem współrzędnych chromosomalnych przy użyciu funkcji sortBam(), co ułatwia dalszą analizę i indeksowanie.
+- Za pomocą funkcji sortBam() plik BAM jest sortowany według współrzędnych, co upraszcza dalsze indeksowanie i analizowanie danych.
 
 **Indeksowanie plików**
-- Indeksowanie plików FASTA (za pomocą indexFa()) i BAM (za pomocą indexBam()) zapewnia szybki dostęp do danych, co znacząco przyspiesza proces analizy wariantów.
+- Pliki FASTA i BAM są indeksowane przy użyciu funkcji indexFa() oraz indexBam(), co zapewnia szybki dostęp do danych w trakcie analizy.
+
 ---
 # 4. Ocena jakości danych sekwencyjnych
 **Weryfikacja struktury pliku BAM**
@@ -45,7 +48,8 @@ Do przeprowadzenia analizy wariantów wykorzystano pakiety z ekosystemu Biocondu
 - Funkcja idxstatsBam() pozwoliła na uzyskanie statystyk, takich jak liczba zmapowanych (713,927) oraz niezmapowanych (506,059) odczytów, co stanowi podstawę do oceny jakości i kompletności danych.
 
 **Pokrycie genomu**
-- Funkcja coverage() obliczyła liczbę odczytów przypadających na każdą pozycję w genomie. Dzięki wizualizacji wyników za pomocą funkcji plot() możliwe było zidentyfikowanie obszarów o niskim i wysokim pokryciu, co pozwala na wykrycie potencjalnych artefaktów lub problemów związanych z sekwencjonowaniem.
+- Funkcja coverage() oblicza pokrycie genomu, czyli liczbę odczytów przypadających na każdą pozycję w genomie. Wizualizacja z wykorzystaniem plot(coverage_data) pozwala ocenić jakość pokrycia. Obszary o wysokim pokryciu mogą sugerować artefakty lub sekwencje powtarzalne, podczas gdy niskie pokrycie może wskazywać na problemy z sekwencjonowaniem.
+
 ---
 # 5. Wykrywanie wariantów
 **Generowanie danych pileup**
@@ -67,7 +71,7 @@ Przefiltrowano warianty, uwzględniając minimalne kryteria:
 Wyselekcjonowane warianty zapisano w pliku CSV, umożliwiając ich dalszą analizę w innych narzędziach bioinformatycznych.
 ---
 # Podsumowanie
-Wykonany pipeline obejmuje:
+**Wykonany pipeline obejmuje:**
 
 - Przygotowanie danych wejściowych i ich przetwarzanie (sortowanie, indeksowanie),
 - Kontrolę jakości danych sekwencyjnych,
